@@ -28,10 +28,12 @@ class VeiculoController {
       .create({ entrada: moment().format("YYYY-MM-DD HH:mm:ss") });
   }
 
-  async update({request, response}) {
-    const veiculo = await Veiculo.query().with('movimentacao').where('placa',request.placa).fetch();
+  async find({params, request, response}) {
+     const veiculo = await Veiculo.findByOrFail('placa',params.placa);
+       // const movimentacao = await veiculo.movimentacao().fetch();
 
-    console.log(veiculo.toJSON());
+
+    response.send(veiculo.movimentacao().fetch());
   }
 
 }
