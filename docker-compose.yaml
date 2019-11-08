@@ -1,0 +1,25 @@
+version: '3'
+services:
+  backend:
+    image: 'node:10-alpine'
+    volumes:
+     - ./api-gateway:/app/
+    command: sh -c "
+             apk add tzdata &&
+             cp /usr/share/zoneinfo/America/Manaus /etc/localtime &&
+             echo 'America/Manaus' > /etc/timezone &&
+             npm i &&
+             npx adonis migration:run &&
+             npm start"
+    working_dir: /app
+    ports:
+     - 3000:3000
+
+  frontend:
+    image: 'node:lts-alpine'
+    volumes:
+    - ./Vue:/app/
+    command: sh -c "npm i && npm run serve"
+    working_dir: /app
+    ports:
+    - 8080:8080
